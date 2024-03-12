@@ -5,7 +5,9 @@
 
 
 @layer base{
-
+ *{
+  scroll-behavior: smooth;
+ }
 }
 
 @layer components{

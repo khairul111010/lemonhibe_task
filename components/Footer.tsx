@@ -38,7 +38,7 @@ const Footer = () => {
               <Image src={DribbleLogo} alt="Dribble" width={24} height={24} />
             </Link>
           </div>
-          <div className="mt-6 text-base font-normal">
+          <div className="mt-6 text-base font-normal" id="#footer">
             &copy; 2023 Lemonhive. All rights reserved.
           </div>
         </div>
