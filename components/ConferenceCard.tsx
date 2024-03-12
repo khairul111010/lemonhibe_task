@@ -16,7 +16,7 @@ const ConferenceCard: FC<Props> = ({ align, item }) => {
         <Link href={`/${item.id}`}
           className={`${
             align % 2 === 0 ? "order-3" : "order-1"
-          } col-span-5 flex items-start gap-[10px] border-t-4 border-[#CDCDCD] bg-[#F9FAFB] py-7 px-4 rounded-lg overflow-hidden hover:-translate-y-1 transition-all duration-150 ease-in-out`}
+          } col-span-5 flex items-start gap-[10px] border-t-4 border-[#CDCDCD] bg-[#F9FAFB] py-7 px-4 rounded-lg overflow-hidden hover:shadow transition-all duration-150 ease-in-out`}
         >
           <Image src={"/Marker.svg"} width={16} height={16} alt="mark" />
           <div className="flex flex-col gap-[10px]">
@@ -76,7 +76,7 @@ const ConferenceCard: FC<Props> = ({ align, item }) => {
             {item.startDate}
           </div>
           <div
-            className={`flex items-start gap-[10px] border-t-4 border-[#CDCDCD] bg-[#F9FAFB] py-7 px-4 rounded-lg overflow-hidden hover:-translate-y-1 transition-all duration-150 ease-in-out`}
+            className={`flex items-start gap-[10px] border-t-4 border-[#CDCDCD] bg-[#F9FAFB] py-7 px-4 rounded-lg overflow-hidden hover:shadow transition-all duration-150 ease-in-out`}
           >
             <Image src={"/Marker.svg"} width={16} height={16} alt="mark" />
             <div className="flex flex-col gap-[10px]">
