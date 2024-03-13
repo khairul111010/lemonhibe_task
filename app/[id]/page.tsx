@@ -2,26 +2,37 @@
 
 import { client } from "@/lib/ApoloClient";
 import { GET_SINGLE_CONFERENCE } from "@/lib/Queries";
+import { DndContext, closestCorners } from "@dnd-kit/core";
+import {
+  SortableContext,
+  arrayMove,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+
+const SideBarCard = dynamic(() => import("@/components/SideBarCard"), {
+  ssr: false,
+});
 
 const Page = ({ params }: any) => {
   const [data, setData] = useState(null);
   const [sidebar, setSidebar] = useState([
-    { name: "Organizer", isActive: true },
-    { name: "Speakers", isActive: false },
-    { name: "Schedule", isActive: false },
-    { name: "Sponsors", isActive: false },
+    { id: 1, name: "Organizer", isActive: true },
+    { id: 2, name: "Speakers", isActive: false },
+    { id: 3, name: "Schedule", isActive: false },
+    { id: 4, name: "Sponsors", isActive: false },
   ]);
 
-  client
-    .query({
-      query: GET_SINGLE_CONFERENCE,
-      variables: { id: params.id },
-    })
-    .then((result) => setData(result.data.conference));
-
-  console.log(data);
+  useEffect(() => {
+    client
+      .query({
+        query: GET_SINGLE_CONFERENCE,
+        variables: { id: params.id },
+      })
+      .then((result) => setData(result.data.conference));
+  }, [params]);
 
   const handleActive = (name: string) => {
     setSidebar((prevState) => {
@@ -51,6 +62,21 @@ const Page = ({ params }: any) => {
     });
   };
 
+  const getPosition = (id: number) =>
+    sidebar.findIndex((position) => position.id === id);
+
+  const handleDragEnd = (event: any) => {
+    const { active, over } = event;
+
+    if (active.id === over.id) return;
+
+    setSidebar((sidebar) => {
+      const originalPos = getPosition(active.id);
+      const newPos = getPosition(over.id);
+      return arrayMove(sidebar, originalPos, newPos);
+    });
+  };
+
   return (
     <div className="container">
       <div className="md:text-5xl text-primary font-bold md:mt-24 mt-12 text-2xl">
@@ -61,39 +87,29 @@ const Page = ({ params }: any) => {
       </div>
 
       <div className="hidden md:grid grid-cols-4 my-14 gap-12">
-        <div className="col-span-1 flex flex-col gap-8">
-          {sidebar.map((item: any, index: number) => {
-            return (
-              <div
-                key={index}
-                onClick={() => handleActive(item.name)}
-                className={`cursor-pointer border rounded-lg flex items-center gap-10 p-2 group hover:bg-secondary hover:shadow ${
-                  item.isActive ? "bg-secondary shadow" : ""
-                }`}
-              >
-                <div
-                  className={`p-4 rounded-[3px] ${
-                    item.isActive ? "bg-white" : "bg-secondary/10"
-                  } group-hover:bg-white w-fit`}
-                >
-                  <Image
-                    src={"/updown.svg"}
-                    alt="Up down"
-                    width={25}
-                    height={22}
+        <DndContext
+          onDragEnd={handleDragEnd}
+          collisionDetection={closestCorners}
+        >
+          <div className="col-span-1 flex flex-col gap-8">
+            <SortableContext
+              items={sidebar}
+              strategy={verticalListSortingStrategy}
+            >
+              {sidebar.map((item: any) => {
+                return (
+                  <SideBarCard
+                    id={item.id}
+                    item={item}
+                    key={item.id}
+                    onSelect={(res: any) => console.log("hello")}
                   />
-                </div>
-                <div
-                  className={`font-bold text-xl ${
-                    item.isActive ? "text-white" : "text-primary"
-                  }  group-hover:text-white`}
-                >
-                  {item.name}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+                );
+              })}
+            </SortableContext>
+          </div>
+        </DndContext>
+
         <div className="col-span-3 bg-[#F9FAFB] p-14 rounded-lg">
           {sidebar[0].name === "Organizer" && sidebar[0].isActive && (
             <div></div>

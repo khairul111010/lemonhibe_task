@@ -13,7 +13,8 @@ const ConferenceCard: FC<Props> = ({ align, item }) => {
   return (
     <>
       <div className="hidden md:grid grid-cols-11 items-start gap-10">
-        <Link href={`/${item.id}`}
+        <Link
+          href={`/${item.id}`}
           className={`${
             align % 2 === 0 ? "order-3" : "order-1"
           } col-span-5 flex items-start gap-[10px] border-t-4 border-[#CDCDCD] bg-[#F9FAFB] py-7 px-4 rounded-lg overflow-hidden hover:shadow transition-all duration-150 ease-in-out`}
@@ -72,7 +73,9 @@ const ConferenceCard: FC<Props> = ({ align, item }) => {
         </div>
 
         <div className="col-span-5 relative">
-          <div className={`text-[#617187] col-span-5 text-sm font-normal absolute -top-2 left-0 -translate-y-full`}>
+          <div
+            className={`text-[#617187] col-span-5 text-sm font-normal absolute -top-2 left-0 -translate-y-full`}
+          >
             {item.startDate}
           </div>
           <div
